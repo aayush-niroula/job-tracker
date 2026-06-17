@@ -11,3 +11,30 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model JobApplication {
+  id            String    @id @default(uuid()) @db.Uuid
+  company_name  String    @db.VarChar(255)
+  job_title     String    @db.VarChar(255)
+  job_type      JobType
+  status        JobStatus
+  applied_date  DateTime  @db.Date
+  notes         String?   @db.Text
+  created_at    DateTime  @default(now()) @db.Timestamp
+  updated_at    DateTime  @updatedAt @db.Timestamp
+
+  @@map("job_applications")
+}
+
+enum JobType {
+  INTERNSHIP
+  FULL_TIME
+  PART_TIME
+}
+
+enum JobStatus {
+  APPLIED
+  INTERVIEWING
+  OFFER
+  REJECTED
+}
