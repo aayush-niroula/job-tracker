@@ -1,60 +1,57 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ApplicationForm } from "@/components/ApplicationForm";
-import { type ApplicationFormData } from "@/types/application";
-
-const mockApplications: Record<string, ApplicationFormData> = {
-  "1": {
-    company_name: "Tech Corp",
-    job_title: "Frontend Developer",
-    job_type: "Full-time",
-    status: "Applied",
-    applied_date: "2026-06-15",
-    notes: "Great opportunity",
-  },
-  "2": {
-    company_name: "Startup Inc",
-    job_title: "Intern",
-    job_type: "Internship",
-    status: "Interviewing",
-    applied_date: "2026-06-10",
-    notes: "",
-  },
-};
+import { useGetApplicationQuery, useUpdateApplicationMutation } from "@/app/application";
+import type { ApplicationFormData } from "@/types/application";
 
 export default function EditApplicationPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [updateApplication, { isLoading, error: updateError }] = useUpdateApplicationMutation();
+  const { data: application, isLoading: isLoadingApp, error: fetchError } = useGetApplicationQuery(id!, { skip: !id });
 
-  const initialData = id ? mockApplications[id] : undefined;
-
-  const handleSubmit = (data: ApplicationFormData) => {
-    console.log("Updated application:", { id, ...data });
-    navigate("/");
+  const handleSubmit = async (data: ApplicationFormData) => {
+    if (!id) return;
+    try {
+      await updateApplication({ id, data }).unwrap();
+      navigate("/");
+    } catch (err) {
+      console.error("Failed to update application:", err);
+    }
   };
 
-  if (!initialData) {
-    return (
-      <div className="container mx-auto p-4">
-        <p>Application not found</p>
-      </div>
-    );
-  }
+  if (isLoadingApp) return <div className="p-8 text-center">Loading application...</div>;
+  if (fetchError || !application) return <div className="p-8 text-center text-destructive">Application not found</div>;
 
- return (
-  <div className="min-h-screen flex items-center justify-center px-4 py-8">
-    <div className="w-full max-w-2xl">
-      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">
-        Edit Application
-      </h1>
+  const initialData: ApplicationFormData = {
+    company_name: application.company_name,
+    job_title: application.job_title,
+    job_type: application.job_type,
+    status: application.status,
+    applied_date: application.applied_date,
+    notes: application.notes ?? "",
+  };
 
-      <div className="bg-card border rounded-xl p-4 sm:p-6 md:p-8 shadow-sm">
-        <ApplicationForm
-          initialData={initialData}
-          onSubmit={handleSubmit}
-          submitLabel="Update Application"
-        />
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-2xl">
+        <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">
+          Edit Application
+        </h1>
+
+        {updateError && (
+          <div className="mb-4 p-3 bg-destructive/10 text-destructive text-sm rounded-lg">
+            Failed to update application. Please try again.
+          </div>
+        )}
+
+        <div className="bg-card border rounded-xl p-4 sm:p-6 md:p-8 shadow-sm">
+          <ApplicationForm
+            initialData={initialData}
+            onSubmit={handleSubmit}
+            submitLabel={isLoading ? "Updating..." : "Update Application"}
+          />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }

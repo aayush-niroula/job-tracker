@@ -1,32 +1,17 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { type Application } from "@/types/application";
 import { StatusBadge } from "@/components/StatusBadge";
+import { useGetApplicationQuery } from "@/app/application";
 import { ArrowLeft, Building2, Briefcase, Calendar, Clock, FileText, Pencil } from "lucide-react";
 
-const mockApplications: Application[] = [
-  {
-    id: "1",
-    company_name: "Tech Corp",
-    job_title: "Frontend Developer",
-    job_type: "Full-time",
-    status: "Applied",
-    applied_date: "2026-06-15",
-    notes: "Great opportunity",
-    created_at: "2026-06-15T10:00:00Z",
-    updated_at: "2026-06-15T10:00:00Z",
-  },
-  {
-    id: "2",
-    company_name: "Startup Inc",
-    job_title: "Intern",
-    job_type: "Internship",
-    status: "Interviewing",
-    applied_date: "2026-06-10",
-    notes: "",
-    created_at: "2026-06-10T10:00:00Z",
-    updated_at: "2026-06-12T10:00:00Z",
-  },
-];
+function getJobTypeLabel(jobType: Application["job_type"]): string {
+  const labels: Record<Application["job_type"], string> = {
+    FULL_TIME: "Full-time",
+    PART_TIME: "Part-time",
+    INTERNSHIP: "Internship",
+  };
+  return labels[jobType];
+}
 
 function DetailRow({
   icon,
@@ -52,9 +37,28 @@ function DetailRow({
 
 export default function ApplicationDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const application = id ? mockApplications.find((app) => app.id === id) : undefined;
+  const { data: application, isLoading, error } = useGetApplicationQuery(id!, { skip: !id });
 
-  if (!application) return <Navigate to="/" replace />;
+  if (!id) return <Navigate to="/" replace />;
+  if (isLoading) return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-center">
+        <div className="w-8 h-8 border-2 border-foreground border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        <p className="text-sm text-muted-foreground">Loading application...</p>
+      </div>
+    </div>
+  );
+  if (error || !application) return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="p-6 bg-destructive/10 text-destructive rounded-lg text-center">
+        <p className="font-medium">Application not found</p>
+        <Link to="/" className="inline-flex items-center gap-2 mt-3 text-sm hover:underline">
+          <ArrowLeft className="w-4 h-4" />
+          Go back to applications
+        </Link>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -98,7 +102,7 @@ export default function ApplicationDetailPage() {
           {/* Detail rows */}
           <div className="px-6 py-1">
             <DetailRow icon={<Clock className="w-4 h-4" />} label="Job Type">
-              {application.job_type}
+              {getJobTypeLabel(application.job_type)}
             </DetailRow>
 
             <DetailRow icon={<Calendar className="w-4 h-4" />} label="Applied Date">
