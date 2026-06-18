@@ -7,6 +7,13 @@ interface StatusFilterProps {
   onStatusChange: (status: ApplicationStatus | "All") => void;
 }
 
+const statusLabels: Record<ApplicationStatus, string> = {
+  APPLIED: "Applied",
+  INTERVIEWING: "Interviewing",
+  OFFER: "Offer",
+  REJECTED: "Rejected",
+};
+
 const filterConfig: Record<
   ApplicationStatus | "All",
   { icon: React.ReactNode; activeClasses: string }
@@ -15,19 +22,19 @@ const filterConfig: Record<
     icon: <LayoutGrid className="w-3 h-3" />,
     activeClasses: "bg-foreground text-background border-foreground",
   },
-  Applied: {
+  APPLIED: {
     icon: <Send className="w-3 h-3" />,
     activeClasses: "bg-blue-50 text-blue-600 border-blue-200",
   },
-  Interviewing: {
+  INTERVIEWING: {
     icon: <MessageCircle className="w-3 h-3" />,
     activeClasses: "bg-amber-50 text-amber-600 border-amber-200",
   },
-  Offer: {
+  OFFER: {
     icon: <BadgeCheck className="w-3 h-3" />,
     activeClasses: "bg-emerald-50 text-emerald-600 border-emerald-200",
   },
-  Rejected: {
+  REJECTED: {
     icon: <XCircle className="w-3 h-3" />,
     activeClasses: "bg-rose-50 text-rose-500 border-rose-200",
   },
@@ -35,10 +42,10 @@ const filterConfig: Record<
 
 const statuses: (ApplicationStatus | "All")[] = [
   "All",
-  "Applied",
-  "Interviewing",
-  "Offer",
-  "Rejected",
+  "APPLIED",
+  "INTERVIEWING",
+  "OFFER",
+  "REJECTED",
 ];
 
 export function StatusFilter({ selectedStatus, onStatusChange }: StatusFilterProps) {
@@ -47,6 +54,7 @@ export function StatusFilter({ selectedStatus, onStatusChange }: StatusFilterPro
       {statuses.map((status) => {
         const { icon, activeClasses } = filterConfig[status];
         const isActive = selectedStatus === status;
+        const label = status === "All" ? "All" : statusLabels[status as ApplicationStatus];
 
         return (
           <button
@@ -60,7 +68,7 @@ export function StatusFilter({ selectedStatus, onStatusChange }: StatusFilterPro
             )}
           >
             {icon}
-            {status}
+            {label}
           </button>
         );
       })}
