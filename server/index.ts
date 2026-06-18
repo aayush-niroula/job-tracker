@@ -5,6 +5,7 @@ import cors from "cors";
 import applicationsRouter from "./routes/applications";
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+const SERVER_URL = process.env.SERVER_URL ?? `http://localhost:${PORT}`;
 const app = express();
 
 app.use(cors());

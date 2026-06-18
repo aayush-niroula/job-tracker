@@ -18,6 +18,15 @@
       "@/*": ["./src/*"]
     },
 
+    /* Strict mode */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
 
     /* Linting */
     "noUnusedLocals": true,
