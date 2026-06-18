@@ -33,10 +33,10 @@ export function ApplicationForm({ initialData, onSubmit, submitLabel }: Applicat
     initialData || {
       company_name: "",
       job_title: "",
-      job_type: "Full-time",
-      status: "Applied",
+      job_type: "FULL_TIME",
+      status: "APPLIED",
       applied_date: "",
-      notes: "",
+      notes: undefined,
     }
   );
 
@@ -139,9 +139,9 @@ export function ApplicationForm({ initialData, onSubmit, submitLabel }: Applicat
             onChange={handleChange}
             className={inputClass}
           >
-            <option value="Full-time">Full-time</option>
-            <option value="Part-time">Part-time</option>
-            <option value="Internship">Internship</option>
+            <option value="FULL_TIME">Full-time</option>
+            <option value="PART_TIME">Part-time</option>
+            <option value="INTERNSHIP">Internship</option>
           </select>
         </div>
         <div>
@@ -154,10 +154,10 @@ export function ApplicationForm({ initialData, onSubmit, submitLabel }: Applicat
             onChange={handleChange}
             className={inputClass}
           >
-            <option value="Applied">Applied</option>
-            <option value="Interviewing">Interviewing</option>
-            <option value="Offer">Offer</option>
-            <option value="Rejected">Rejected</option>
+            <option value="APPLIED">Applied</option>
+            <option value="INTERVIEWING">Interviewing</option>
+            <option value="OFFER">Offer</option>
+            <option value="REJECTED">Rejected</option>
           </select>
         </div>
       </div>
@@ -187,14 +187,14 @@ export function ApplicationForm({ initialData, onSubmit, submitLabel }: Applicat
           Notes
           <span className="text-muted-foreground/40 normal-case tracking-normal font-normal ml-1 text-[10px]">optional</span>
         </label>
-        <textarea
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-          rows={4}
-          placeholder="Anything worth remembering about this role…"
-          className={`${inputClass} resize-none`}
-        />
+<textarea
+              name="notes"
+              value={formData.notes ?? ""}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Anything worth remembering about this role…"
+              className={`${inputClass} resize-none`}
+            />
       </div>
 
       {/* Submit */}

@@ -6,16 +6,17 @@ import { Pencil, Trash2, Eye, Building2, Briefcase, Calendar } from "lucide-reac
 interface ApplicationCardProps {
   application: Application;
   onDelete: (id: string) => void;
+  isDeleting?: boolean;
 }
 
-export function ApplicationCard({ application, onDelete }: ApplicationCardProps) {
+export function ApplicationCard({ application, onDelete, isDeleting }: ApplicationCardProps) {
   const { id, company_name, job_title, status, applied_date } = application;
 
   return (
     <div className="group relative bg-card border border-border/50 rounded-xl p-5 transition-all duration-200 hover:border-border hover:shadow-md hover:shadow-black/5 hover:-translate-y-0.5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
-        
+         
           <div className="shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground">
             <Building2 className="w-4 h-4" />
           </div>
@@ -48,7 +49,8 @@ export function ApplicationCard({ application, onDelete }: ApplicationCardProps)
           </Link>
           <button
             onClick={() => onDelete(id)}
-            className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-150"
+            disabled={isDeleting}
+            className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
             title="Delete"
           >
             <Trash2 className="w-3.5 h-3.5" />

@@ -1,5 +1,5 @@
 import { APPLICATION_TAG, api } from "./api";
-import type { Application, ApplicationFormData } from "@/types/application";
+import type { Application, ApplicationFormData, ApplicationQueryParams } from "@/types/application";
 
 export type ApplicationListResponse = {
   applications: Application[];
@@ -8,12 +8,7 @@ export type ApplicationListResponse = {
   limit: number;
 };
 
-export type ListApplicationsArgs = {
-  status?: Application["status"];
-  search?: string;
-  page?: number;
-  limit?: number;
-};
+export type ListApplicationsArgs = ApplicationQueryParams;
 
 export type UpdateApplicationArgs = {
   id: string;
