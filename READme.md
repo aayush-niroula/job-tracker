@@ -53,7 +53,7 @@ Core features:
 3. Install client dependencies:
 
    ```bash
-   cd ../client
+   cd ./client
    npm install
    ```
 
@@ -62,7 +62,7 @@ Core features:
    Server:
 
    ```bash
-   cd ../server
+   cd ./server
    ```
 
    Create `server/.env` with:
@@ -76,7 +76,7 @@ Core features:
    Client:
 
    ```bash
-   cd ../client
+   cd ./client
    ```
 
    Create `client/.env` with:
@@ -89,7 +89,7 @@ Core features:
 5. Generate the Prisma client:
 
    ```bash
-   cd ../server
+   cd ./server
    npx prisma generate
    ```
 
@@ -143,7 +143,7 @@ The server serves the built React app from `client/dist` and returns `client/dis
 2. Start the server from the `server` directory:
 
    ```bash
-   cd ../server
+   cd ./server
    npm run dev
    ```
 
@@ -169,7 +169,7 @@ cd server
 npm test
 ```
 
-The client currently includes Vitest tests. The server test script is configured, but no server tests are currently included in the repository.
+The client currently includes Vitest tests.
 
 ## Required environment variables
 
